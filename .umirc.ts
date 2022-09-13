@@ -1,4 +1,4 @@
-import { defineConfig } from '@umijs/max';
+import { defineConfig } from '@umijs/max'
 
 export default defineConfig({
   antd: {},
@@ -7,7 +7,7 @@ export default defineConfig({
   initialState: {},
   request: {},
   layout: {
-    title: '@umijs/max',
+    title: '@umijs/max123',
   },
   routes: [
     {
@@ -29,6 +29,16 @@ export default defineConfig({
       path: '/table',
       component: './Table',
     },
+    {
+      name: '类组件',
+      path: '/basic-class',
+      component: './BasicClass',
+    },
+    {
+      name: '函数组件',
+      path: '/basic-function',
+      component: './BasicFunction',
+    },
   ],
   npmClient: 'pnpm',
-});
+})
