@@ -5,6 +5,8 @@ import React from 'react'
  */
 interface PropsType {
   title: string
+  comValue: number
+  changeComValue: (data: number) => void
   onClick: () => void
   changeTitle: (data: string) => void
   children: React.ReactNode
@@ -87,6 +89,26 @@ class ClassCom extends React.Component<PropsType, StateType> {
         <div>{this.props.children}</div>
         <div>{this.state.specifySlot}</div>
         <div>{this.state.scopeSlot}</div>
+
+        <div>
+          <h2>表单</h2>
+          <React.Fragment>
+            {(() => (
+              <div>
+                <span>{this.props.comValue}</span>
+                <button
+                  type="button"
+                  onClick={this.props.changeComValue.bind(
+                    this,
+                    this.props.comValue + 1,
+                  )}
+                >
+                  +1
+                </button>
+              </div>
+            ))()}
+          </React.Fragment>
+        </div>
       </div>
     )
   }

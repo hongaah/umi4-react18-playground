@@ -23,6 +23,8 @@ import { useWatch } from '../hooks/useWatch'
 
 export interface FunctionProps {
   title: string
+  comValue: number
+  IncreaseComValue: (data: number) => void
   onClick: () => void
   changeTitle: (data: string) => void
   children: React.ReactNode
@@ -35,6 +37,8 @@ function FunctionCom(props: FunctionProps, ref: any) {
   // props 作为传入组件参数数据的集合(包括变量、事件、方法、插槽)，可以解构赋值，可以定义默认值
   const {
     title = 'default',
+    comValue, // 类 Vue 的 v-model
+    IncreaseComValue,
     onClick,
     changeTitle, // 类 vue 的 defineEmits
     children,
@@ -120,6 +124,15 @@ function FunctionCom(props: FunctionProps, ref: any) {
       <div>{children}</div>
       {getSpecifySlot}
       {getScopeSlot}
+      <div>
+        类 vue 的 v-model：{comValue}
+        <button
+          type="button"
+          onClick={() => IncreaseComValue(props.comValue + 1)}
+        >
+          +1
+        </button>
+      </div>
     </div>
   )
 }
