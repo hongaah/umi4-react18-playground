@@ -1,6 +1,7 @@
 import React from 'react'
 
 import ClassComponent from './components/ClassCom'
+import ClassLifeCircle from './components/ClassLifeCircle'
 
 /**
  * 类组件首页
@@ -114,6 +115,7 @@ export default class BasicClass extends React.Component<PropsType, StateType> {
             <span>{this.state.inputValue}</span>
           </div>
         </div>
+        <ClassLifeCircle />
       </div>
     )
   }
