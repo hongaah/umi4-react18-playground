@@ -1,6 +1,7 @@
 import type { ChangeEvent } from 'react'
 import { useRef, useState } from 'react'
 import FunctionComponent from './components/FunctionCom'
+import { MyContext } from './context'
 
 /**
  * 函数组件首页
@@ -34,6 +35,12 @@ const BasicPage: React.FC = () => {
 
   // 类 vue 的 v-if
   const [display, setDisplay] = useState(true)
+
+  // 依赖注入 context
+  const [contextValue] = useState({
+    contextValue1: '123',
+    contextValue2: '456',
+  })
 
   // 类 vue 的 v-for
   // 遍历数组数据时需要设定key，否则会有告警，如果数组顺序会变则不要使用数组索引，应该为每个元素设定固定的唯一值，否则性能会变差和引起组件状态问题
@@ -80,18 +87,20 @@ const BasicPage: React.FC = () => {
     <div>
       {element}
       {getElementFn(elementObj)}
-      <FunctionComponent
-        ref={functionCompRef}
-        comValue={comValue}
-        IncreaseComValue={IncreaseComValue}
-        title={title}
-        onClick={() => handleDomClick()}
-        changeTitle={changeTitle}
-        specifySlot={getSpecifySlot}
-        scopeSlot={getScopeSlot}
-      >
-        来自父组件的普通插槽
-      </FunctionComponent>
+      <MyContext.Provider value={contextValue}>
+        <FunctionComponent
+          ref={functionCompRef}
+          comValue={comValue}
+          IncreaseComValue={IncreaseComValue}
+          title={title}
+          onClick={() => handleDomClick()}
+          changeTitle={changeTitle}
+          specifySlot={getSpecifySlot}
+          scopeSlot={getScopeSlot}
+        >
+          来自父组件的普通插槽
+        </FunctionComponent>
+      </MyContext.Provider>
 
       <button onClick={handleChangeSon} type="button">
         调用子组件的方法

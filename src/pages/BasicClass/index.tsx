@@ -2,6 +2,7 @@ import React from 'react'
 
 import ClassComponent from './components/ClassCom'
 import ClassLifeCircle from './components/ClassLifeCircle'
+import { MyContext } from './context'
 
 /**
  * 类组件首页
@@ -14,6 +15,10 @@ interface StateType {
   title: string
   inputValue: string
   comValue: number
+  contextObj: {
+    contextValue1: string
+    contextValue2: string
+  }
 }
 
 // interface ComPropsType {
@@ -29,6 +34,10 @@ export default class BasicClass extends React.Component<PropsType, StateType> {
       title: '类组件',
       inputValue: '',
       comValue: 0,
+      contextObj: {
+        contextValue1: '11111',
+        contextValue2: '22222',
+      },
     }
     this.handleChangeProps = this.handleChangeProps.bind(this)
     this.changeInputValue = this.changeInputValue.bind(this)
@@ -86,37 +95,39 @@ export default class BasicClass extends React.Component<PropsType, StateType> {
 
   render() {
     return (
-      <div>
-        <ClassComponent
-          ref={this.classCompRef}
-          title={this.state.title}
-          comValue={this.state.comValue}
-          changeComValue={this.changeComValue}
-          onClick={() => this.handleParentClick()}
-          changeTitle={this.handleChangeProps}
-          specifySlot={this.getSpecifySlot}
-          scopeSlot={this.getSonSlot}
-        >
-          来自父组件的普通插槽
-        </ClassComponent>
-
-        <button onClick={() => this.handleChangeSon()} type="button">
-          调用子组件的方法
-        </button>
-
+      <MyContext.Provider value={this.state.contextObj}>
         <div>
-          <h2>表单</h2>
+          <ClassComponent
+            ref={this.classCompRef}
+            title={this.state.title}
+            comValue={this.state.comValue}
+            changeComValue={this.changeComValue}
+            onClick={() => this.handleParentClick()}
+            changeTitle={this.handleChangeProps}
+            specifySlot={this.getSpecifySlot}
+            scopeSlot={this.getSonSlot}
+          >
+            来自父组件的普通插槽
+          </ClassComponent>
+
+          <button onClick={() => this.handleChangeSon()} type="button">
+            调用子组件的方法
+          </button>
+
           <div>
-            <input
-              type="text"
-              value={this.state.inputValue}
-              onChange={this.changeInputValue}
-            />
-            <span>{this.state.inputValue}</span>
+            <h2>表单</h2>
+            <div>
+              <input
+                type="text"
+                value={this.state.inputValue}
+                onChange={this.changeInputValue}
+              />
+              <span>{this.state.inputValue}</span>
+            </div>
           </div>
+          <ClassLifeCircle />
         </div>
-        <ClassLifeCircle />
-      </div>
+      </MyContext.Provider>
     )
   }
 }

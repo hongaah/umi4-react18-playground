@@ -1,4 +1,5 @@
 import React from 'react'
+import ClassContext from './ClassContext'
 
 /**
  * 类组件
@@ -45,7 +46,7 @@ class ClassCom extends React.Component<PropsType, StateType> {
     this.props.onClick()
   }
 
-  // 改变内部数据 state，setState() 接受内部数据 state 和参数数据 props 作为参数，而且 state 和 props 只读无法修改但都是最新的
+  // 改变内部数据 state，setState() 接受内部数据 state 和参数数据 props 作为参数，而且参数是只读无法修改但都是最新的
   handleChangeState() {
     this.setState((state) => ({
       ...state,
@@ -108,6 +109,11 @@ class ClassCom extends React.Component<PropsType, StateType> {
               </div>
             ))()}
           </React.Fragment>
+        </div>
+
+        <div>
+          <h2>依赖注入</h2>
+          <ClassContext />
         </div>
       </div>
     )

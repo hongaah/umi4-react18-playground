@@ -20,6 +20,7 @@
 
 import { forwardRef, useImperativeHandle, useState } from 'react'
 import { useWatch } from '../hooks/useWatch'
+import FunctionContext from './FunctionContext'
 
 export interface FunctionProps {
   title: string
@@ -132,6 +133,11 @@ function FunctionCom(props: FunctionProps, ref: any) {
         >
           +1
         </button>
+      </div>
+
+      <div>
+        <h2>依赖注入</h2>
+        <FunctionContext />
       </div>
     </div>
   )
