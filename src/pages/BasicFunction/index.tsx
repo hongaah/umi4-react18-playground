@@ -1,6 +1,7 @@
 import type { ChangeEvent } from 'react'
 import { useRef, useState } from 'react'
 import FunctionComponent from './components/FunctionCom'
+import FunctionRoute from './components/FunctionRoute'
 import { MyContext } from './context'
 
 /**
@@ -85,6 +86,9 @@ const BasicPage: React.FC = () => {
 
   return (
     <div>
+      <h1>函数组件</h1>
+      <FunctionRoute />
+
       {element}
       {getElementFn(elementObj)}
       <MyContext.Provider value={contextValue}>

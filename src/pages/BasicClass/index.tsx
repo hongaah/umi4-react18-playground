@@ -1,7 +1,8 @@
 import React from 'react'
 
 import ClassComponent from './components/ClassCom'
-import ClassLifeCircle from './components/ClassLifeCircle'
+import ClassRoute from './components/ClassRoute'
+// import ClassLifeCircle from './components/ClassLifeCircle'
 import { MyContext } from './context'
 
 /**
@@ -97,6 +98,8 @@ export default class BasicClass extends React.Component<PropsType, StateType> {
     return (
       <MyContext.Provider value={this.state.contextObj}>
         <div>
+          <h1>类组件</h1>
+          <ClassRoute />
           <ClassComponent
             ref={this.classCompRef}
             title={this.state.title}
@@ -125,7 +128,9 @@ export default class BasicClass extends React.Component<PropsType, StateType> {
               <span>{this.state.inputValue}</span>
             </div>
           </div>
-          <ClassLifeCircle />
+
+          {/* 类组件的生命周期 */}
+          {/* <ClassLifeCircle /> */}
         </div>
       </MyContext.Provider>
     )
