@@ -30,18 +30,45 @@ export interface RefProps {
 }
 
 const BasicPage: React.FC = () => {
+  /**
+   * useState
+   */
+  // 设置变量初始值
   const [title, setTitle] = useState('函数组件')
+  const [count, setCount] = useState(0)
+
+  // 通过计算得到的变量初始值
+  const [calcVal] = useState(() => title + '(计算版)')
+
+  // 同时使用setState方法时，需要传入一个函数
+  function changeDoubleState() {
+    // setCount(count + 1)
+    // setCount(count + 1) // 只生效一次
+    setCount((c) => c + 1)
+    setCount((c) => c + 1)
+  }
+
+  // 拆分 & 合并 state：减少组件渲染（在函数式组件中，只要一个state改变都会引起组件的重新渲染。而在React中只要父组件重新渲染，其子组件都会被重新渲染。）
+  const [reactive, setReactive] = useState({
+    a: 1,
+    b: 2,
+    c: 3,
+  })
+  function changeReactive() {
+    setReactive((val) => ({
+      ...val,
+      a: 11,
+    }))
+  }
+
+  /**
+   * 类 Vue 写法
+   */
   // 类 vue 的 v-show
   const [show, setShow] = useState(true)
 
   // 类 vue 的 v-if
   const [display, setDisplay] = useState(true)
-
-  // 依赖注入 context
-  const [contextValue] = useState({
-    contextValue1: '123',
-    contextValue2: '456',
-  })
 
   // 类 vue 的 v-for
   // 遍历数组数据时需要设定key，否则会有告警，如果数组顺序会变则不要使用数组索引，应该为每个元素设定固定的唯一值，否则性能会变差和引起组件状态问题
@@ -59,17 +86,6 @@ const BasicPage: React.FC = () => {
     setComValue(data)
   }
 
-  // refs 组件实例: 父调子方法
-  const functionCompRef = useRef<RefProps>(null)
-  const handleChangeSon = () => {
-    functionCompRef?.current?.handleChangeState()
-  }
-
-  // 监听 React 组件的 DOM 事件
-  const handleDomClick = () => {
-    console.log('parent dom clicked')
-  }
-
   // 子组件的修改父组件数据 emits
   const changeTitle = (data: string) => {
     setTitle(data)
@@ -82,6 +98,26 @@ const BasicPage: React.FC = () => {
   // slot 作用域插槽：子组件传参
   const getScopeSlot = (data: string) => {
     return <div>来自子组件的作用域插槽{data}</div>
+  }
+
+  /**
+   * 其他
+   */
+  // 依赖注入 context
+  const [contextValue] = useState({
+    contextValue1: '123',
+    contextValue2: '456',
+  })
+
+  // refs 组件实例: 父调子方法
+  const functionCompRef = useRef<RefProps>(null)
+  const handleChangeSon = () => {
+    functionCompRef?.current?.handleChangeState()
+  }
+
+  // 监听 React 组件的 DOM 事件
+  const handleDomClick = () => {
+    console.log('parent dom clicked')
   }
 
   return (
@@ -110,6 +146,22 @@ const BasicPage: React.FC = () => {
         调用子组件的方法
       </button>
 
+      <div>
+        <h2>hooks</h2>
+        <div>
+          count: {count}
+          <button type="button" onClick={changeDoubleState}>
+            change*2
+          </button>
+        </div>
+        <div>
+          reactive: {JSON.stringify(reactive)}
+          <button type="button" onClick={changeReactive}>
+            change reactive
+          </button>
+        </div>
+        <div>setComplexState: {calcVal}</div>
+      </div>
       <div>
         <h2>表单</h2>
         <div>
