@@ -2,8 +2,6 @@ import { MyContext } from '../context'
 
 /**
  * 依赖注入 context
- *
- *
  */
 
 export default function FunctionContext() {
