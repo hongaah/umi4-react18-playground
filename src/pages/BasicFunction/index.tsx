@@ -66,8 +66,7 @@ const BasicPage: React.FC = () => {
         title="🌰"
         gutter={[8, 8]}
         wrap
-        hoverable
-        bordered
+        ghost
         style={{ marginBlockStart: 8 }}
       >
         <ProCard colSpan={{ xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }}>

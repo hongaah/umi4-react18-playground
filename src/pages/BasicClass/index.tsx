@@ -1,5 +1,5 @@
+import { PageContainer, ProCard } from '@ant-design/pro-components'
 import React from 'react'
-
 import ClassComponent from './components/ClassCom'
 import ClassRoute from './components/ClassRoute'
 // import ClassLifeCircle from './components/ClassLifeCircle'
@@ -97,41 +97,60 @@ export default class BasicClass extends React.Component<PropsType, StateType> {
   render() {
     return (
       <MyContext.Provider value={this.state.contextObj}>
-        <div>
-          <h1>类组件</h1>
-          <ClassRoute />
-          <ClassComponent
-            ref={this.classCompRef}
-            title={this.state.title}
-            comValue={this.state.comValue}
-            changeComValue={this.changeComValue}
-            onClick={() => this.handleParentClick()}
-            changeTitle={this.handleChangeProps}
-            specifySlot={this.getSpecifySlot}
-            scopeSlot={this.getSonSlot}
-          >
-            来自父组件的普通插槽
-          </ClassComponent>
+        <PageContainer
+          header={{
+            title: '类组件',
+          }}
+        >
+          <ProCard title="首页" hoverable bordered>
+            <button onClick={() => this.handleChangeSon()} type="button">
+              调用子组件的方法
+            </button>
 
-          <button onClick={() => this.handleChangeSon()} type="button">
-            调用子组件的方法
-          </button>
-
-          <div>
-            <h2>表单</h2>
             <div>
-              <input
-                type="text"
-                value={this.state.inputValue}
-                onChange={this.changeInputValue}
-              />
-              <span>{this.state.inputValue}</span>
+              <h2>表单</h2>
+              <div>
+                <input
+                  type="text"
+                  value={this.state.inputValue}
+                  onChange={this.changeInputValue}
+                />
+                <span>{this.state.inputValue}</span>
+              </div>
             </div>
-          </div>
-
-          {/* 类组件的生命周期 */}
-          {/* <ClassLifeCircle /> */}
-        </div>
+          </ProCard>
+          <ProCard
+            title="🌰"
+            gutter={[8, 8]}
+            wrap
+            ghost
+            style={{ marginBlockStart: 8 }}
+          >
+            <ProCard colSpan={{ xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }}>
+              <ClassComponent
+                ref={this.classCompRef}
+                title={this.state.title}
+                comValue={this.state.comValue}
+                changeComValue={this.changeComValue}
+                onClick={() => this.handleParentClick()}
+                changeTitle={this.handleChangeProps}
+                specifySlot={this.getSpecifySlot}
+                scopeSlot={this.getSonSlot}
+              >
+                来自父组件的普通插槽
+              </ClassComponent>
+            </ProCard>
+            <ProCard colSpan={{ xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }}>
+              <ClassRoute />
+            </ProCard>
+            <ProCard
+              title="类组件的生命周期"
+              colSpan={{ xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }}
+            >
+              {/* <ClassLifeCircle /> */}
+            </ProCard>
+          </ProCard>
+        </PageContainer>
       </MyContext.Provider>
     )
   }
