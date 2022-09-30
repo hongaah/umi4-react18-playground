@@ -1,8 +1,11 @@
+import styles from '@/assets/styles/common.less'
 import { PageContainer, ProCard } from '@ant-design/pro-components'
 import { useRef, useState } from 'react'
 import FunctionBasic from './components/FunctionBasic'
+import FunctionBrowser from './components/FunctionBrowser'
 import FunctionCom from './components/FunctionCom'
 import FunctionHooks from './components/FunctionHooks'
+import FunctionHooksCustom from './components/FunctionHooksCustom'
 import FunctionRoute from './components/FunctionRoute'
 import FunctionVue from './components/FunctionVue'
 import { MyContext } from './context'
@@ -62,26 +65,24 @@ const BasicPage: React.FC = () => {
           通过 ref 调用子组件的方法
         </button>
       </ProCard>
-      <ProCard
-        title="🌰"
-        gutter={[8, 8]}
-        wrap
-        ghost
-        style={{ marginBlockStart: 8 }}
-      >
-        <ProCard colSpan={{ xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }}>
+      <div style={{ margin: '20px 0 10px' }}>🌰</div>
+      <div className={styles['fluid-layout']}>
+        <ProCard className={styles['fluid-item']}>
           <FunctionBasic />
         </ProCard>
-        <ProCard colSpan={{ xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }}>
-          <FunctionHooks />
-        </ProCard>
-        <ProCard colSpan={{ xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }}>
-          <FunctionVue />
-        </ProCard>
-        <ProCard colSpan={{ xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }}>
+        <ProCard className={styles['fluid-item']}>
           <FunctionRoute />
         </ProCard>
-        <ProCard colSpan={{ xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }}>
+        <ProCard className={styles['fluid-item']}>
+          <FunctionHooks />
+        </ProCard>
+        <ProCard className={styles['fluid-item']}>
+          <FunctionHooksCustom />
+        </ProCard>
+        <ProCard className={styles['fluid-item']}>
+          <FunctionVue />
+        </ProCard>
+        <ProCard className={styles['fluid-item']}>
           <MyContext.Provider value={contextValue}>
             <FunctionCom
               title="组件"
@@ -90,7 +91,10 @@ const BasicPage: React.FC = () => {
             />
           </MyContext.Provider>
         </ProCard>
-      </ProCard>
+        <ProCard className={styles['fluid-item']}>
+          <FunctionBrowser />
+        </ProCard>
+      </div>
     </PageContainer>
   )
 }

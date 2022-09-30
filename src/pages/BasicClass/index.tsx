@@ -1,3 +1,4 @@
+import styles from '@/assets/styles/common.less'
 import { PageContainer, ProCard } from '@ant-design/pro-components'
 import React from 'react'
 import ClassComponent from './components/ClassCom'
@@ -119,14 +120,9 @@ export default class BasicClass extends React.Component<PropsType, StateType> {
               </div>
             </div>
           </ProCard>
-          <ProCard
-            title="🌰"
-            gutter={[8, 8]}
-            wrap
-            ghost
-            style={{ marginBlockStart: 8 }}
-          >
-            <ProCard colSpan={{ xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }}>
+          <div style={{ margin: '20px 0 10px' }}>🌰</div>
+          <div className={styles['fluid-layout']}>
+            <ProCard className={styles['fluid-item']}>
               <ClassComponent
                 ref={this.classCompRef}
                 title={this.state.title}
@@ -140,16 +136,13 @@ export default class BasicClass extends React.Component<PropsType, StateType> {
                 来自父组件的普通插槽
               </ClassComponent>
             </ProCard>
-            <ProCard colSpan={{ xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }}>
+            <ProCard className={styles['fluid-item']}>
               <ClassRoute />
             </ProCard>
-            <ProCard
-              title="类组件的生命周期"
-              colSpan={{ xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }}
-            >
+            <ProCard title="类组件的生命周期" className={styles['fluid-item']}>
               {/* <ClassLifeCircle /> */}
             </ProCard>
-          </ProCard>
+          </div>
         </PageContainer>
       </MyContext.Provider>
     )
