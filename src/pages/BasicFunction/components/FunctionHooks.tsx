@@ -1,13 +1,20 @@
 import React, {
   useCallback,
   useContext,
-  // useEffect,
+  useDeferredValue,
+  useEffect,
   useMemo,
   useReducer,
+  // useEffect,
+  useRef,
   useState,
 } from 'react'
 import { MyContext } from '../context'
+import styles from '../styles.less'
 
+// https://juejin.cn/post/7118937685653192735
+
+/** useState 可以使函数组件像类组件一样拥有 state，函数组件通过 useState 可以让组件重新渲染，更新视图 */
 function UseStateDemo() {
   /**
    * useState
@@ -65,11 +72,14 @@ function UseStateDemo() {
   )
 }
 
+/** useReducer 是 react-hooks 提供的能够在无状态组件中运行的类似 redux 的功能 api */
 function UseReducerDemo() {
-  /* number为更新后的state值,  dispatchNumbner 为当前的派发函数 */
-  const [number, dispatchNumbner] = useReducer((state: any, action: any) => {
+  /**
+   * useReducer 参数可以认为就是一个 redux 中的 reducer，reducer 的参数就是常规 reducer 里面的 state 和 action, 返回改变后的 state
+   */
+  const [number, dispatchNumber] = useReducer((state: any, action: any) => {
     const { payload, name } = action
-    /* return的值为新的state，如果返回的 state 和之前的 state ，内存指向相同，那么组件将不会更新 */
+    /* return 的值为新的 state，如果返回的 state 和之前的 state，内存指向相同，那么组件将不会更新 */
     switch (name) {
       case 'add':
         return state + 1
@@ -86,25 +96,140 @@ function UseReducerDemo() {
       <h3>useReducer</h3>
       当前值：{number}
       {/* 派发更新 */}
-      <button type="button" onClick={() => dispatchNumbner({ name: 'add' })}>
+      <button type="button" onClick={() => dispatchNumber({ name: 'add' })}>
         增加
       </button>
-      <button type="button" onClick={() => dispatchNumbner({ name: 'sub' })}>
+      <button type="button" onClick={() => dispatchNumber({ name: 'sub' })}>
         减少
       </button>
       <button
         type="button"
-        onClick={() => dispatchNumbner({ name: 'reset', payload: 666 })}
+        onClick={() => dispatchNumber({ name: 'reset', payload: 666 })}
       >
         赋值
       </button>
-      <button type="button" onClick={() => dispatchNumbner({})}>
+      <button type="button" onClick={() => dispatchNumber({})}>
         空参
       </button>
       {/* 把dispatch 和 state 传递给子组件  */}
+      {/* <MyChildren  dispatch={ dispatchNumbner } State={{ number }} /> */}
     </div>
   )
 }
+
+/**
+ * useTransition 是把 startTransition 内部的更新任务变成了过渡任务 transtion
+ * useDeferredValue 是把原值通过过渡任务得到新的值，这个值作为延时状态
+ *
+ * 一个是处理一段逻辑，另一个是生产一个新的状态。
+ */
+/* eslint-disable */
+function UseTransitionAndUseDeferredValueDemo() {
+  const mockList1 = new Array(10000)
+    .fill('tab1')
+    .map((item, index) => item + '--' + index)
+  const mockList2 = new Array(10000)
+    .fill('tab2')
+    .map((item, index) => item + '--' + index)
+  const mockList3 = new Array(10000)
+    .fill('tab3')
+    .map((item, index) => item + '--' + index)
+
+  const tabList = {
+    tab1: mockList1,
+    tab2: mockList2,
+    tab3: mockList3,
+  }
+
+  const [active, setActive] = useState<keyof typeof tabList>('tab1')
+
+  // useTransition
+  // const [renderData, setRenderData] = useState(tabList[active])
+  // const [isPending, startTransition] = useTransition()
+
+  // useDeferredValue
+  const deferActive = useDeferredValue(active)
+  const renderData = tabList[deferActive]
+
+  const handleChangeTab = (tab: keyof typeof tabList) => {
+    setActive(tab)
+    // startTransition(() => {
+    //   setRenderData(tabList[tab])
+    // })
+  }
+
+  return (
+    <div>
+      <h3>useTransition</h3>
+      <div>
+        {Object.keys(tabList).map((item, index) => (
+          <button
+            onClick={() => handleChangeTab(item as keyof typeof tabList)}
+            type="button"
+            key={index}
+            className={
+              active === item
+                ? `${styles.active} ${styles.tab}`
+                : `${styles.tab}`
+            }
+          >
+            {item}
+          </button>
+        ))}
+      </div>
+      <div>
+        {/* <div>{isPending && 'loading...'}</div> */}
+        <div>
+          {renderData.map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+/* eslint-disable */
+
+/* eslint-disable */
+function UseEffectDemo() {
+  /**
+   * useEffect
+   *
+   * 作用：类似于componentDidMount 和 componentDidUpdate
+   * 参数：第二个参数的值发生改变时，才执行第一个参数传的副作用函数
+   * 缺点：useEffect 监听数据变化，会在组件初次渲染后就会调用一次，没有保存修改前的旧值，不会返回一个函数取消监听，所以可以自己实现一个类 vue 的 watch
+   */
+  const [number, setNumber] = useState(0)
+
+  function handleResize() {
+    console.log('is resizing')
+  }
+  window.addEventListener('resize', handleResize)
+  const timer = setInterval(() => {
+    console.log('interval')
+  }, 1000)
+  console.log('重渲染时执行')
+
+  useEffect(() => {
+    console.log('依赖变化时执行')
+    // 返回的 destory 函数作为下一次 callback 执行之前调用，用于清除上一次 callback 产生的副作用
+    return function () {
+      console.log('切换页面后执行')
+      clearInterval(timer)
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
+  return (
+    <div>
+      <h3>useEffect</h3>
+      <button type="button" onClick={() => setNumber((n) => n + 1)}>
+        {number}
+      </button>
+    </div>
+  )
+}
+/* eslint-disable */
 
 function UseMemoDemo() {
   /**
@@ -220,28 +345,37 @@ function UseContextDemo() {
   )
 }
 
-export default function FunctionBasic() {
-  /**
-   * hooks：
-   * useState, useEffect, useRef
-   */
+function UseRefDemo() {
+  const DomRef = useRef(null)
 
-  /**
-   * useEffect
-   *
-   * 作用：类似于componentDidMount 和 componentDidUpdate
-   * 参数：第二个参数的值发生改变时，才执行第一个参数传的副作用函数
-   * 缺点：useEffect 监听数据变化，会在组件初次渲染后就会调用一次，没有保存修改前的旧值，不会返回一个函数取消监听，所以可以自己实现一个类 vue 的 watch
-   */
+  useEffect(() => {
+    console.log(DomRef.current)
+  }, [])
 
   return (
     <div>
-      <h2>Hooks</h2>
+      <h2>useRef</h2>
+      <div ref={DomRef}>ref test test</div>
+    </div>
+  )
+}
+
+export default function FunctionBasic() {
+  return (
+    <div>
+      <h1>Hooks</h1>
+      <h2>数据更新驱动</h2>
       <UseStateDemo />
       <UseReducerDemo />
+      {/* <UseTransitionAndUseDeferredValueDemo /> */}
+      <h2>执行副作用</h2>
+      {/* <UseEffectDemo /> */}
+      <h2>状态获取和传递</h2>
+      <UseContextDemo />
+      <UseRefDemo />
+      <h2>状态派生和保存</h2>
       <UseMemoDemo />
       <UseCallbackDemo />
-      <UseContextDemo />
     </div>
   )
 }
