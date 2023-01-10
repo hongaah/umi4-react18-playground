@@ -1,13 +1,12 @@
 import React, {
   useCallback,
   useContext,
-  useDeferredValue,
   useEffect,
   useMemo,
   useReducer,
-  // useEffect,
   useRef,
   useState,
+  useTransition,
 } from 'react'
 import { MyContext } from '../context'
 import styles from '../styles.less'
@@ -144,18 +143,18 @@ function UseTransitionAndUseDeferredValueDemo() {
   const [active, setActive] = useState<keyof typeof tabList>('tab1')
 
   // useTransition
-  // const [renderData, setRenderData] = useState(tabList[active])
-  // const [isPending, startTransition] = useTransition()
+  const [renderData, setRenderData] = useState(tabList[active])
+  const [isPending, startTransition] = useTransition()
 
   // useDeferredValue
-  const deferActive = useDeferredValue(active)
-  const renderData = tabList[deferActive]
+  // const deferActive = useDeferredValue(active)
+  // const renderData = tabList[deferActive]
 
   const handleChangeTab = (tab: keyof typeof tabList) => {
-    setActive(tab)
-    // startTransition(() => {
-    //   setRenderData(tabList[tab])
-    // })
+    // setActive(tab)
+    startTransition(() => {
+      setRenderData(tabList[tab])
+    })
   }
 
   return (
@@ -178,7 +177,7 @@ function UseTransitionAndUseDeferredValueDemo() {
         ))}
       </div>
       <div>
-        {/* <div>{isPending && 'loading...'}</div> */}
+        <div>{isPending && 'loading...'}</div>
         <div>
           {renderData.map((item, index) => (
             <li key={index}>{item}</li>
@@ -249,7 +248,7 @@ function UseMemoDemo() {
       <h2>useMemo</h2>
       <div>
         <span>
-          cache: {cacheValue}
+          count:{count}, cache: {cacheValue}
           <button type="button" onClick={() => setCount((c) => c + 1)}>
             改变缓存
           </button>
@@ -279,7 +278,7 @@ function UseCallbackDemo() {
   const [count, setCount] = useState(0)
   const getInfo = useCallback((info: string) => alert(info), [])
 
-  // 子组件加 React.demo 搭配才会优化组件更新！
+  // 子组件加 React.memo 搭配才会优化组件更新！
   const SonComp = React.memo((props: any) => {
     const { sonInfo } = props
 
@@ -367,7 +366,7 @@ export default function FunctionBasic() {
       <h2>数据更新驱动</h2>
       <UseStateDemo />
       <UseReducerDemo />
-      {/* <UseTransitionAndUseDeferredValueDemo /> */}
+      <UseTransitionAndUseDeferredValueDemo />
       <h2>执行副作用</h2>
       {/* <UseEffectDemo /> */}
       <h2>状态获取和传递</h2>
